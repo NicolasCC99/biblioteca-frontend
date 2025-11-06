@@ -2,6 +2,7 @@ import { Injectable, signal, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_URL } from '../../environments/environments';
 
 export interface User {
   id: string;
@@ -20,11 +21,10 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://biblioteca-backend-baaw.onrender.com/api';
+  private apiUrl = API_URL;
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
   
-  // Signals para manejo de estado
   currentUser = signal<User | null>(null);
   isLoggedIn = signal<boolean>(false);
 
@@ -41,7 +41,6 @@ export class AuthService {
     this.currentUser.set(user);
     this.isLoggedIn.set(true);
     
-    // Solo acceder a localStorage si estamos en el navegador
     if (this.isBrowser) {
       localStorage.setItem('currentUser', JSON.stringify(user));
     }
@@ -51,14 +50,12 @@ export class AuthService {
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
     
-    // Solo acceder a localStorage si estamos en el navegador
     if (this.isBrowser) {
       localStorage.removeItem('currentUser');
     }
   }
 
   checkStoredUser() {
-    // Solo acceder a localStorage si estamos en el navegador
     if (this.isBrowser) {
       const storedUser = localStorage.getItem('currentUser');
       if (storedUser) {
@@ -68,8 +65,7 @@ export class AuthService {
     }
   }
  
-getStudents(): Observable<{ success: boolean; users?: any[] }> {
-  return this.http.get<{ success: boolean; users?: any[] }>('http://localhost:3000/api/users/list');
-}
-
+  getStudents(): Observable<{ success: boolean; users?: any[] }> {
+    return this.http.get<{ success: boolean; users?: any[] }>(`${this.apiUrl}/users/list`);
+  }
 }

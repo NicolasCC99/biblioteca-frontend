@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_URL } from '../../environments/environments';
 
 export interface Loan {
   _id?: string;
@@ -24,13 +25,12 @@ export interface LoanResponse {
   providedIn: 'root'
 })
 export class LoanService {
-  private apiUrl = 'https://biblioteca-backend-baaw.onrender.com/api/loans';
+  private apiUrl = `${API_URL}/loans`;
   
   loans = signal<Loan[]>([]);
 
   constructor(private http: HttpClient) {}
 
-  // Obtener préstamos
   getLoans(userId?: string, role?: string): Observable<LoanResponse> {
     let params = '';
     if (userId && role) {
@@ -39,12 +39,10 @@ export class LoanService {
     return this.http.get<LoanResponse>(`${this.apiUrl}${params}`);
   }
 
-  // Crear préstamo
   createLoan(loan: Partial<Loan>): Observable<LoanResponse> {
     return this.http.post<LoanResponse>(this.apiUrl, loan);
   }
 
-  // Devolver libro
   returnBook(id: string): Observable<LoanResponse> {
     return this.http.put<LoanResponse>(`${this.apiUrl}/${id}/return`, {});
   }
