@@ -24,7 +24,7 @@ export interface LoanResponse {
   providedIn: 'root'
 })
 export class LoanService {
-  private apiUrl = 'http://localhost:3000/api/loans';
+  private apiUrl = 'https://biblioteca-backend-baaw.onrender.com/api/loans';
   
   loans = signal<Loan[]>([]);
 

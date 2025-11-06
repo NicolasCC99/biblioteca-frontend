@@ -26,7 +26,7 @@ export interface BookResponse {
   providedIn: 'root'
 })
 export class BookService {
-  private apiUrl = 'http://localhost:3000/api/books';
+  private apiUrl = 'https://biblioteca-backend-baaw.onrender.com/api/books';
   
   // Signal para mantener la lista de libros
   books = signal<Book[]>([]);
